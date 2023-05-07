@@ -32,25 +32,44 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
             convertView = LayoutInflater.from(context).inflate(R.layout.table_adapter_layout, parent, false)
         }
 
-        val selectedFile = filesAndFolders[position];
+        val selectedFile = filesAndFolders[position]
 
         val icon = convertView?.findViewById(R.id.icon) as ImageView
+        if (!selectedFile.isDirectory) {
+            setImage(icon, selectedFile.name)//выбор иконки для файла
+        }
         val textView = convertView.findViewById(R.id.fileName) as TextView
         textView.text = selectedFile.name
 
         val fileItem = convertView.findViewById(R.id.fileItem) as LinearLayout
         fileItem.setOnClickListener() {
             if (selectedFile.isDirectory) {
-                var path = selectedFile.absolutePath
+                val path = selectedFile.absolutePath
                 (context as MainActivity).changeFragmentView(path)
             }
             else {
                 //TODO() open the fle
             }
         }
-
-
         return convertView
+    }
+
+    private fun setImage(image : ImageView, fileName : String) {
+        when (fileName.substring(fileName.lastIndexOf("."))) {
+            ".doc" -> image.setImageResource(R.drawable.icon_doc)
+            ".docx"-> image.setImageResource(R.drawable.icon_docx)
+            ".jpg"-> image.setImageResource(R.drawable.icon_jpg)
+            ".mp3"-> image.setImageResource(R.drawable.icon_mp3)
+            ".pdf"-> image.setImageResource(R.drawable.icon_pdf)
+            ".png"-> image.setImageResource(R.drawable.icon_png)
+            ".zip"-> image.setImageResource(R.drawable.icon_zip_folder)
+            ".flac"-> image.setImageResource(R.drawable.icon_flac)
+            ".mp4"-> image.setImageResource(R.drawable.icon_mp4)
+            ".txt"-> image.setImageResource(R.drawable.icon_txt)
+            else -> {
+                image.setImageResource(R.drawable.file_icon56)
+            }
+        }
     }
 
 }
