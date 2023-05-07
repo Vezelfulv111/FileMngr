@@ -84,7 +84,14 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
 
     }
     private fun setImage(image : ImageView, fileName : String) {
-        when (fileName.substring(fileName.lastIndexOf("."))) {
+
+        var index = fileName.lastIndexOf(".");
+        if (index == -1) {
+            image.setImageResource(R.drawable.file_icon56)
+            return
+        }
+
+        when (fileName.substring(index)) {
             ".doc" -> image.setImageResource(R.drawable.icon_doc)
             ".docx"-> image.setImageResource(R.drawable.icon_docx)
             ".jpg"-> image.setImageResource(R.drawable.icon_jpg)
