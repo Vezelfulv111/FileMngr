@@ -22,10 +22,10 @@ class MainActivity : AppCompatActivity() {
         if(!checkPermission())
             requestPermission()
         else
-            showRootFolder()
-
+            setFirstFragmentView()
     }
 
+    //Callback формы на запрос разрешения
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 123) {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 val grantResult = grantResults[i]
                 if (permission == Manifest.permission.WRITE_EXTERNAL_STORAGE) {
                     if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                        showRootFolder()//пользователь дал разрешение продолжаем работу
+                        setFirstFragmentView()//пользователь дал разрешение, продолжаем работу
                     }
                     else {
                         //пользователь отклонил разрешение, выводится сообщение, зачем данное разрешение нужно
@@ -46,15 +46,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showRootFolder() {
-        val path = Environment.getExternalStorageDirectory().path
-        val root =  File(path)
-        val filesAndFolders  = root.listFiles()
-        if (filesAndFolders != null) {
-            val listViewFiles : ListView = findViewById(R.id.fileList) // находим список
-            val fileAdapter = FileAdapter(this@MainActivity, filesAndFolders)//передаем аргументы в адаптер
-            listViewFiles.adapter = fileAdapter
-        }
+    //фукнция для cмены фрагмента
+    fun changeFragmentView(filepath: String) {
+        val fragment = FileListFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        val args = Bundle()
+        args.putString("filepath", filepath)
+        fragment.arguments = args
+        transaction.replace(android.R.id.content, fragment).addToBackStack("Fragment")
+        transaction.commit()
+    }
+    private fun setFirstFragmentView() {
+        val fragment = FileListFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(android.R.id.content, fragment).addToBackStack("Fragment")
+        transaction.commit()
     }
 
     private fun checkPermission(): Boolean {

@@ -41,6 +41,8 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
         val fileItem = convertView.findViewById(R.id.fileItem) as LinearLayout
         fileItem.setOnClickListener() {
             if (selectedFile.isDirectory) {
+                var path = selectedFile.absolutePath
+                (context as MainActivity).changeFragmentView(path)
             }
             else {
                 //TODO() open the fle
