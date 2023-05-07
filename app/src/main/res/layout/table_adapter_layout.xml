@@ -10,7 +10,12 @@
         android:id="@+id/icon"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:src="@drawable/folder_icon24"></ImageView>
+        android:cropToPadding="false"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:paddingRight="3dp"
+        android:paddingBottom="3dp"
+        android:src="@drawable/folder_icon56"></ImageView>
 
     <TextView
         android:id="@+id/fileName"
