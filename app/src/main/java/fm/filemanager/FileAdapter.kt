@@ -1,7 +1,6 @@
 package fm.filemanager
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import java.io.File
+import java.text.SimpleDateFormat
 
 class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) : BaseAdapter() {
 
@@ -34,12 +34,23 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
 
         val selectedFile = filesAndFolders[position]
 
+
         val icon = convertView?.findViewById(R.id.icon) as ImageView
+        val fileSize = convertView.findViewById(R.id.fileSize) as TextView
+        val fileTime = convertView.findViewById(R.id.timeofEdit) as TextView
+        val sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+
         if (!selectedFile.isDirectory) {
             setImage(icon, selectedFile.name)//выбор иконки для файла
+            fileSize.text = fileSize(selectedFile)
+            fileTime.text = "Дaта создания: ${sdf.format(selectedFile.lastModified())}"
         }
-        val textView = convertView.findViewById(R.id.fileName) as TextView
-        textView.text = selectedFile.name
+        else {
+            fileSize.text = ""
+            fileTime.text = ""
+        }
+        val fileName = convertView.findViewById(R.id.fileName) as TextView
+        fileName.text = selectedFile.name
 
         val fileItem = convertView.findViewById(R.id.fileItem) as LinearLayout
         fileItem.setOnClickListener() {
@@ -54,6 +65,24 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
         return convertView
     }
 
+    private fun fileSize(file : File): String {
+        val fileSizeInByte = file.length()
+        val fileSizeInKb = fileSizeInByte / 1024
+        val fileSizeInMb = fileSizeInKb / 1024
+        val fileSizeInGb = fileSizeInMb / 1024
+        if (fileSizeInByte > 1024) {
+            if (fileSizeInKb > 1024) {
+                if (fileSizeInMb > 1024)
+                    return "$fileSizeInGb Мб"
+                else
+                    return "$fileSizeInMb Гб"
+            }
+            else
+                return "$fileSizeInKb Кб"
+        } else
+            return "$fileSizeInByte байт"
+
+    }
     private fun setImage(image : ImageView, fileName : String) {
         when (fileName.substring(fileName.lastIndexOf("."))) {
             ".doc" -> image.setImageResource(R.drawable.icon_doc)

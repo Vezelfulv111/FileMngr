@@ -2,4 +2,7 @@
     <string name="app_name">Файловый менеджер</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="table_DateOf">Дата создания :</string>
+    <string name="table_size">Размер</string>
+    <string name="table_fileName">Имя файла</string>
 </resources>
