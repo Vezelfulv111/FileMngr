@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.*
 
 class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) : BaseAdapter() {
 
@@ -27,6 +28,9 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
     }
 
     override fun getView(position: Int, View: View?, parent: ViewGroup?): View {
+
+        filesAndFolders.sortWith(FileNameComparator())
+
         var convertView: View? = View
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.table_adapter_layout, parent, false)
