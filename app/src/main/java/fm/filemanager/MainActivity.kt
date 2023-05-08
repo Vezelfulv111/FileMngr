@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         else
             setFirstFragmentView()
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu,menu)
         return super.onCreateOptionsMenu(menu)
@@ -120,7 +121,8 @@ class MainActivity : AppCompatActivity() {
     private fun setFirstFragmentView() {
         val fragment = FileListFragment()
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(android.R.id.content, fragment).addToBackStack("Fragment")
+        transaction.replace(android.R.id.content, fragment)
+        //addToBackStack - не нужно добавлять к первому фрагменту - иначе неккоректно работает кнопка назад
         transaction.commit()
     }
 
