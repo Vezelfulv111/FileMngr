@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import java.io.File
 import java.text.SimpleDateFormat
+import kotlin.math.roundToInt
 
 class FileAdapter(
     var context: Context,
@@ -47,7 +48,7 @@ class FileAdapter(
         setImage(icon, selectedFile)//выбор иконки для файла
         if (!selectedFile.isDirectory) {
             fileSize.text = fileSize(selectedFile)
-            fileTime.text = "${sdf.format(selectedFile.lastModified())}"
+            fileTime.text = sdf.format(selectedFile.lastModified())
         }
         else {
             fileSize.text = ""
@@ -71,26 +72,26 @@ class FileAdapter(
 
     private fun fileSize(file : File): String {
         val fileSizeInByte = file.length()
-        val fileSizeInKb = fileSizeInByte / 1024
-        val fileSizeInMb = fileSizeInKb / 1024
-        val fileSizeInGb = fileSizeInMb / 1024
+        val fileSizeInKb = fileSizeInByte / 1024.0
+        val fileSizeInMb = fileSizeInKb / 1024.0
+        val fileSizeInGb = fileSizeInMb / 1024.0
         if (fileSizeInByte > 1024) {
             if (fileSizeInKb > 1024) {
                 if (fileSizeInMb > 1024)
-                    return " - $fileSizeInGb Мб"
+                    return " - ${(fileSizeInGb * 100).roundToInt() / 100.0} ГБ"
                 else
-                    return " - $fileSizeInMb Гб"
+                    return " - ${(fileSizeInMb * 100).roundToInt() / 100.0} МБ"
             }
             else
-                return " - $fileSizeInKb Кб"
+                return " - ${(fileSizeInKb * 100).roundToInt() / 100.0} КБ"
         } else
-            return " - $fileSizeInByte байт"
-
+            return " - $fileSizeInByte Б"
     }
+
     private fun setImage(image : ImageView, file : File) {
         if (!file.isDirectory) {
-            val fileName = file.name;
-            val index = fileName.lastIndexOf(".");
+            val fileName = file.name
+            val index = fileName.lastIndexOf(".")
             if (index == -1) {
                 image.setImageResource(R.drawable.file_icon56)
                 return
