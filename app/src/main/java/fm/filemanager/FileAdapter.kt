@@ -1,16 +1,23 @@
 package fm.filemanager
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.roundToInt
+
 
 class FileAdapter(
     var context: Context,
@@ -43,7 +50,7 @@ class FileAdapter(
         val icon = convertView?.findViewById(R.id.icon) as ImageView
         val fileSize = convertView.findViewById(R.id.fileSize) as TextView
         val fileTime = convertView.findViewById(R.id.timeofEdit) as TextView
-        val sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+        val sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault())
 
         setImage(icon, selectedFile)//выбор иконки для файла
         if (!selectedFile.isDirectory) {
@@ -64,10 +71,31 @@ class FileAdapter(
                 (context as MainActivity).changeFragmentView(path)
             }
             else {
-                //TODO() open the fle
+                //открытие файла
+                val uri = Uri.fromFile(filesAndFolders[position])
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(uri, getMimeType(filesAndFolders[position]))
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                val intentChooser = Intent.createChooser(intent, "Выберите приложение")
+                StrictMode.VmPolicy.Builder().build().apply {StrictMode.setVmPolicy(this)}
+                try {
+                    (context as MainActivity).startActivity(intentChooser)
+                }
+                catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
         return convertView
+    }
+
+    private fun getMimeType(file: File): String {
+        var type = "*/*"
+        val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: "*/*"
+        }
+        return type
     }
 
     private fun fileSize(file : File): String {
