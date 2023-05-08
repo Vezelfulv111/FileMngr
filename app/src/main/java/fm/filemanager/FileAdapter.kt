@@ -47,7 +47,7 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
         if (!selectedFile.isDirectory) {
             setImage(icon, selectedFile.name)//выбор иконки для файла
             fileSize.text = fileSize(selectedFile)
-            fileTime.text = "Дaта создания: ${sdf.format(selectedFile.lastModified())}"
+            fileTime.text = "${sdf.format(selectedFile.lastModified())}"
         }
         else {
             fileSize.text = ""
@@ -77,14 +77,14 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
         if (fileSizeInByte > 1024) {
             if (fileSizeInKb > 1024) {
                 if (fileSizeInMb > 1024)
-                    return "$fileSizeInGb Мб"
+                    return " - $fileSizeInGb Мб"
                 else
-                    return "$fileSizeInMb Гб"
+                    return " - $fileSizeInMb Гб"
             }
             else
-                return "$fileSizeInKb Кб"
+                return " - $fileSizeInKb Кб"
         } else
-            return "$fileSizeInByte байт"
+            return " - $fileSizeInByte байт"
 
     }
     private fun setImage(image : ImageView, fileName : String) {
