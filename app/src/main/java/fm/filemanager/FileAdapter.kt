@@ -10,10 +10,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
 
-class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) : BaseAdapter() {
-
+class FileAdapter(
+    var context: Context,
+    var filesAndFolders: Array<out File>,
+    var sortType: SortType
+) : BaseAdapter() {
 
     override fun getCount(): Int {
         return filesAndFolders.size
@@ -29,23 +31,21 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
 
     override fun getView(position: Int, View: View?, parent: ViewGroup?): View {
 
-        filesAndFolders.sortWith(FileNameComparator())
+        filesAndFolders.sortWith(FileNameComparator(sortType))
+        //reversed() не использовался тк данный метод не учитывает что папки все равно должны быть вначале
 
         var convertView: View? = View
-        if (convertView == null) {
+        if (convertView == null)
             convertView = LayoutInflater.from(context).inflate(R.layout.table_adapter_layout, parent, false)
-        }
 
         val selectedFile = filesAndFolders[position]
-
-
         val icon = convertView?.findViewById(R.id.icon) as ImageView
         val fileSize = convertView.findViewById(R.id.fileSize) as TextView
         val fileTime = convertView.findViewById(R.id.timeofEdit) as TextView
         val sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
+        setImage(icon, selectedFile)//выбор иконки для файла
         if (!selectedFile.isDirectory) {
-            setImage(icon, selectedFile.name)//выбор иконки для файла
             fileSize.text = fileSize(selectedFile)
             fileTime.text = "${sdf.format(selectedFile.lastModified())}"
         }
@@ -87,29 +87,32 @@ class FileAdapter(var context: Context, var filesAndFolders:  Array<out File>) :
             return " - $fileSizeInByte байт"
 
     }
-    private fun setImage(image : ImageView, fileName : String) {
-
-        var index = fileName.lastIndexOf(".");
-        if (index == -1) {
-            image.setImageResource(R.drawable.file_icon56)
-            return
-        }
-
-        when (fileName.substring(index)) {
-            ".doc" -> image.setImageResource(R.drawable.icon_doc)
-            ".docx"-> image.setImageResource(R.drawable.icon_docx)
-            ".jpg"-> image.setImageResource(R.drawable.icon_jpg)
-            ".mp3"-> image.setImageResource(R.drawable.icon_mp3)
-            ".pdf"-> image.setImageResource(R.drawable.icon_pdf)
-            ".png"-> image.setImageResource(R.drawable.icon_png)
-            ".zip"-> image.setImageResource(R.drawable.icon_zip_folder)
-            ".flac"-> image.setImageResource(R.drawable.icon_flac)
-            ".mp4"-> image.setImageResource(R.drawable.icon_mp4)
-            ".txt"-> image.setImageResource(R.drawable.icon_txt)
-            else -> {
+    private fun setImage(image : ImageView, file : File) {
+        if (!file.isDirectory) {
+            val fileName = file.name;
+            val index = fileName.lastIndexOf(".");
+            if (index == -1) {
                 image.setImageResource(R.drawable.file_icon56)
+                return
+            }
+            when (fileName.substring(index)) {
+                ".doc" -> image.setImageResource(R.drawable.icon_doc)
+                ".docx"-> image.setImageResource(R.drawable.icon_docx)
+                ".jpg"-> image.setImageResource(R.drawable.icon_jpg)
+                ".mp3"-> image.setImageResource(R.drawable.icon_mp3)
+                ".pdf"-> image.setImageResource(R.drawable.icon_pdf)
+                ".png"-> image.setImageResource(R.drawable.icon_png)
+                ".zip"-> image.setImageResource(R.drawable.icon_zip_folder)
+                ".flac"-> image.setImageResource(R.drawable.icon_flac)
+                ".mp4"-> image.setImageResource(R.drawable.icon_mp4)
+                ".txt"-> image.setImageResource(R.drawable.icon_txt)
+                else -> {
+                    image.setImageResource(R.drawable.file_icon56)
+                }
             }
         }
+        else
+            image.setImageResource(R.drawable.folder_icon56)
     }
 
 }

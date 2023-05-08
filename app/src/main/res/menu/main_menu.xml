@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/sort"
-        android:title="Сортировка" />
+    <item android:id="@+id/i1"
+        android:title="Сортировка">
+        <menu>
+            <item
+                android:id="@+id/name"
+                android:title="\u2191 По имени"/>
+            <item
+                android:id="@+id/size"
+                android:title="\u2191 По размеру"/>
+            <item
+                android:id="@+id/date"
+                android:title="\u2191 По дате создания"/>
+            <item
+                android:id="@+id/extension"
+                android:title="\u2191 По расширению"/>
+        </menu>
+    </item>
 </menu>
