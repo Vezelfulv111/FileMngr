@@ -52,7 +52,7 @@ class FileListFragment : Fragment() {
                 else {
                     //отображаются измененные, выбирается сортировка NameDown
                     item.isChecked = true
-                    showChangedFiles = false
+                    showChangedFiles = true
                     sortFiles(SortType.NameDown)
                 }
             }
