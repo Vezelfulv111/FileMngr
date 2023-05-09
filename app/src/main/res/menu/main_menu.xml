@@ -18,4 +18,7 @@
                 android:title="\u2191 По расширению"/>
         </menu>
     </item>
+    <item android:id="@+id/changedFiles"
+        android:title="Отобразить измененные файлы">
+    </item>
 </menu>

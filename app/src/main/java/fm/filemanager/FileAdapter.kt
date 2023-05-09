@@ -98,6 +98,7 @@ class FileAdapter(
         return type
     }
 
+    //функция для получения размера файла
     private fun fileSize(file : File): String {
         val fileSizeInByte = file.length()
         val fileSizeInKb = fileSizeInByte / 1024.0

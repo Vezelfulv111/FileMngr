@@ -1,8 +1,10 @@
 package fm.filemanager
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -11,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,8 +24,14 @@ class MainActivity : AppCompatActivity() {
 
         if(!checkPermission())
             requestPermission()
-        else
+        else {
             setFirstFragmentView()
+        }
+
+        if (checkPermission()) {
+            var changedFiles = HashCheckout().compareHashWithBD(this)
+            HashCheckout().saveHashToBD(this)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -34,6 +43,9 @@ class MainActivity : AppCompatActivity() {
         val fragment = getVisibleFragment() as FileListFragment
         val hasArrowDown = item.title.contains("\u2193")
         when (item.itemId) {
+            R.id.changedFiles -> {
+
+            }
             R.id.name -> {
                 if (hasArrowDown) {
                     item.title ="\u2191 По имени"
