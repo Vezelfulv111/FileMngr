@@ -49,13 +49,9 @@ class FileComparator(private val sortType: SortType) : Comparator<File> {
                 //сортировка по расширению
                 SortType.ExtensionDown -> {
                     if (!isFile1Directory) {
-                        val index1 = file1.name.lastIndexOf(".")
-                        val index2 = file2.name.lastIndexOf(".")
-                        if (index1 == -1 || index2 == -1) {
-                            file1.name.compareTo(file2.name)//У файлов нет расширения
-                        }
-                        else
-                            index1.compareTo(index2)
+                        val extension1 = getFileExtension(file1)
+                        val extension2 = getFileExtension(file2)
+                        return extension1.compareTo(extension2)
                     }
                     else
                         file1.name.compareTo(file2.name)
@@ -64,7 +60,7 @@ class FileComparator(private val sortType: SortType) : Comparator<File> {
                     if (!isFile1Directory) {
                         val extension1 = getFileExtension(file1)
                         val extension2 = getFileExtension(file2)
-                        return extension1.compareTo(extension2)
+                        return extension2.compareTo(extension1)
                     }
                     else
                         file1.name.compareTo(file2.name)
