@@ -46,7 +46,7 @@ class HashCheckout {
         val changedFilesList = mutableListOf<File>()
         for (file in inListOfFiles) {
             if (!file.isDirectory) {
-                val fileName = file.name
+                val fileName = file.absolutePath
                 val fileHash = md5HashFun(file)
                 val cursor = db.query(
                     TABLE_NAME, arrayOf(COLUMN_HASH),
@@ -78,7 +78,7 @@ class HashCheckout {
             val dbHelper = FileHashesDbHelper(context)
             val db = dbHelper.writableDatabase
             for (file in listOfFiles) {
-                val fileName = file.name
+                val fileName = file.absolutePath
                 val fileHash = md5HashFun(file)
                 val values = ContentValues().apply {
                     put(COLUMN_NAME, fileName)
