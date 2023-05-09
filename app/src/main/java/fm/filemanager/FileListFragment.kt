@@ -18,7 +18,7 @@ enum class SortType {
     DateUp,
 }
 class FileListFragment : Fragment() {
-    private lateinit var showChangedFiles: MenuItem
+    var showChangedFiles = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_file_list, container, false)
         setHasOptionsMenu(true)
@@ -35,7 +35,6 @@ class FileListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
-        showChangedFiles = menu.findItem(R.id.changedFiles)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -47,11 +46,13 @@ class FileListFragment : Fragment() {
                 if (item.isChecked) {
                     //отображаются все файлы, выбирается сортировка NameDown
                     item.isChecked = false
+                    showChangedFiles = false
                     sortFiles(SortType.NameDown)
                 }
                 else {
                     //отображаются измененные, выбирается сортировка NameDown
                     item.isChecked = true
+                    showChangedFiles = false
                     sortFiles(SortType.NameDown)
                 }
             }
@@ -109,7 +110,7 @@ class FileListFragment : Fragment() {
         val listOfFiles: Array<out File>?
         val root = File(path)
         //Далее в зависимости от флага показать измененные файлы сортируются либо все файлы либо только измененные
-        if (showChangedFiles.isChecked) {
+        if (showChangedFiles) {
             listOfFiles = root.listFiles()?.let { HashCheckout().compareHashWithBD(context as MainActivity, it) }
         } else {
             listOfFiles = root.listFiles()

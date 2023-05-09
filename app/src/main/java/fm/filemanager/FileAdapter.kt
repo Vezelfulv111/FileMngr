@@ -8,10 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.core.content.FileProvider
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -86,8 +84,36 @@ class FileAdapter(
                 }
             }
         }
+        fileItem.setOnLongClickListener() { // Обработка долгого нажатия
+            if (!selectedFile.isDirectory) {
+                val popupMenu = PopupMenu(context, convertView)
+                popupMenu.menu.add("Отправить")
+
+                popupMenu.setOnMenuItemClickListener { item ->
+                    //Отправка файла
+                    if (item.title.equals("Отправить")) {
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "*/*"
+                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            putExtra(Intent.EXTRA_SUBJECT,filesAndFolders[position])
+                            putExtra(Intent.EXTRA_TEXT,"ExtraText")
+                            val fileURI = FileProvider.getUriForFile(
+                                context, BuildConfig.APPLICATION_ID + ".provider",
+                                filesAndFolders[position]
+                            )
+                            putExtra(Intent.EXTRA_STREAM, fileURI)
+                        }
+                        context.startActivity(shareIntent)
+                    }
+                    true
+                }
+                popupMenu.show()
+            }
+            return@setOnLongClickListener true
+        }
         return convertView
     }
+
 
     //функция получения content type файла
     private fun getMimeType(file: File): String {
