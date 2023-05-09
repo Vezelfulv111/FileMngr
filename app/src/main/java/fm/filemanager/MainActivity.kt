@@ -1,23 +1,15 @@
 package fm.filemanager
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Environment
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
-    //var changedFiles: Array<out File>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,10 +21,14 @@ class MainActivity : AppCompatActivity() {
             setFirstFragmentView()//разрешение получено, фрагмент с списком файлов отображается
         }
 
-        if (checkPermission()) {
-            //changedFiles = HashCheckout().compareHashWithBD(this)
-            HashCheckout().saveHashToBD(this)
-        }
+        //if (checkPermission()) {
+            //HashCheckout().saveHashToBD(this)
+        //}
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        HashCheckout().saveHashToBD(this)//хэш сохраняется при выходе из приложения
     }
 
     //Callback формы на запрос разрешения на запись во внутреннее хранилище

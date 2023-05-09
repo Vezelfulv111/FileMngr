@@ -8,8 +8,8 @@ import android.os.Environment
 import java.io.File
 import java.security.MessageDigest
 
-const val DATABASE_NAME = "file_hashes.db"
-const val TABLE_NAME = "file_hashes"
+const val DATABASE_NAME = "file_hashes2.db"
+const val TABLE_NAME = "file_hashes2"
 const val COLUMN_NAME = "file_name"
 const val COLUMN_HASH = "file_hash"
 const val DATABASE_VERSION = 1
@@ -58,11 +58,13 @@ class HashCheckout {
                     if (fileHash != savedHash) {
                         changedFilesList.add(file)// Хеш-код файла изменился, добавили в список
                     }
-                } else {
+                }
+                else {
                     changedFilesList.add(file)// Файл не найден в БД
                 }
                 cursor.close()
-            } else {
+            }
+            else {
                 //changedFilesList.add(file)// Файл - директория, добавляем ее в список для навигации
             }
         }
@@ -72,20 +74,29 @@ class HashCheckout {
     fun saveHashToBD(context: Context) {
             val path = Environment.getExternalStorageDirectory().path
             val root = File(path)
-            val listOfFiles = root.listFiles()
+            val listOfFiles = getAllFilesInDirectory(root)
             val dbHelper = FileHashesDbHelper(context)
             val db = dbHelper.writableDatabase
             for (file in listOfFiles) {
-                if (!file.isDirectory) {
-                    val fileName = file.name
-                    val fileHash = md5HashFun(file)
-                    val values = ContentValues().apply {
-                        put(COLUMN_NAME, fileName)
-                        put(COLUMN_HASH, fileHash)
-                    }
-                    db.insert(TABLE_NAME, null, values)
+                val fileName = file.name
+                val fileHash = md5HashFun(file)
+                val values = ContentValues().apply {
+                    put(COLUMN_NAME, fileName)
+                    put(COLUMN_HASH, fileHash)
                 }
+                db.insert(TABLE_NAME, null, values)
             }
             db.close()
+    }
+    private fun getAllFilesInDirectory(directory: File): List<File> {
+        val files = mutableListOf<File>()
+        directory.listFiles()?.forEach { file ->
+            if (file.isDirectory) {
+                files.addAll(getAllFilesInDirectory(file))
+            } else {
+                files.add(file)
+            }
+        }
+        return files
     }
 }
