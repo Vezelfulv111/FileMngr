@@ -33,15 +33,15 @@
 
 ### Cкриншоты
 ##### Окна меню
-![](https://github.com/Vezelfulv111/FileMngrVk/blob/master/readMeImgs/menu1.jpg)
+![](https://github.com/Vezelfulv111/FileMngrVk/blob/master/readMeImgs/menuNew.jpg)
 ##### Отображение измененных файлов
 1-й скриншот файлы в папке
 <br />2-й скриншот - добавили файлы в папку, нажали галочку отобразить измененные файлы.
-![](https://github.com/Vezelfulv111/FileMngrVk/blob/master/readMeImgs/changed1.jpg)
+![](https://github.com/Vezelfulv111/FileMngrVk/blob/master/readMeImgs/changedNew.jpg)
 ##### Опции работы с файлами
 1-й скриншот всплывающее меню на долгое нажате
 <br />2-й скриншот - меню после нажатия на "Отправить"
 <br />3-й скриншот- меню после нажатия на "Удалить"
-![](https://github.com/Vezelfulv111/FileMngrVk/blob/master/readMeImgs/options1.jpg)
+![](https://github.com/Vezelfulv111/FileMngrVk/blob/master/readMeImgs/optionsNew.jpg)
 
 
