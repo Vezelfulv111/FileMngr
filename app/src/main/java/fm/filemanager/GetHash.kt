@@ -25,6 +25,8 @@ class FileHashesDbHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE
     }
 }
 class HashCheckout {
+
+    //функция получения хэша из файла
     private fun md5HashFun(file: File): String {
         val md = MessageDigest.getInstance("MD5")
         return file.inputStream().use { fis ->
@@ -40,6 +42,7 @@ class HashCheckout {
         }
     }
 
+    //хэш файлов из БД сравнивается с входным массивом файлов
     fun compareHashWithBD(context: Context, inListOfFiles: Array<out File>): Array<out File> {
         val dbHelper = FileHashesDbHelper(context)
         val db = dbHelper.readableDatabase
@@ -55,6 +58,7 @@ class HashCheckout {
                 )
                 if (cursor.moveToFirst()) {
                     val savedHash = cursor.getString(cursor.getColumnIndex(COLUMN_HASH))
+                    //для выбранного файла идет сравнение хэша
                     if (fileHash != savedHash) {
                         changedFilesList.add(file)// Хеш-код файла изменился, добавили в список
                     }
@@ -71,6 +75,8 @@ class HashCheckout {
         db.close()
         return changedFilesList.toTypedArray()
     }
+
+    //хэш файлов записывается в базу данных
     fun saveHashToBD(context: Context) {
             val path = Environment.getExternalStorageDirectory().path
             val root = File(path)
@@ -79,8 +85,9 @@ class HashCheckout {
             val db = dbHelper.writableDatabase
             for (file in listOfFiles) {
                 val fileName = file.absolutePath
-                val fileHash = md5HashFun(file)
+                val fileHash = md5HashFun(file)///считается хэш файла
                 val values = ContentValues().apply {
+                    //идет запись в таблицу из двух полей - имя и хэш
                     put(COLUMN_NAME, fileName)
                     put(COLUMN_HASH, fileHash)
                 }

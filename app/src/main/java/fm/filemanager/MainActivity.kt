@@ -62,14 +62,18 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(android.R.id.content, fragment).addToBackStack("Fragment")
         transaction.commit()
     }
+
+    //функция отображения первого фрагмента
     private fun setFirstFragmentView() {
         val fragment = FileListFragment()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(android.R.id.content, fragment)
         //addToBackStack - не нужно добавлять к первому фрагменту - иначе неккоректно работает кнопка назад
+        //отображается активи без фрагментов, а не происходит выход из приложения
         transaction.commit()
     }
 
+    //функция проверки разрешения на запись
     private fun checkPermission(): Boolean {
         val result = ContextCompat.checkSelfPermission(this@MainActivity,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -77,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         return result == PackageManager.PERMISSION_GRANTED
     }
 
+    //функция запроса разрешения на запись
     private fun requestPermission() {
       ActivityCompat.requestPermissions(this@MainActivity,
           arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),123)

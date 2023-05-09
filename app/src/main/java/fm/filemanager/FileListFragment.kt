@@ -25,7 +25,7 @@ class FileListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_file_list, container, false)
         setHasOptionsMenu(true)
 
-        val filesAndFolders  = getFilesAndFolders()
+        val filesAndFolders  = getFilesAndFolders()//получаем список папок и файлов
         if (filesAndFolders != null) {
             val listViewFiles : ListView = view.findViewById(R.id.listView) // находим список
             val fileAdapter = FileAdapter(activity as MainActivity, filesAndFolders, SortType.NameDown)//передаем аргументы в адаптер
@@ -39,16 +39,20 @@ class FileListFragment : Fragment() {
         inflater.inflate(R.menu.main_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+    //функция обработки нажатий на элемент меню
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val hasArrowDown = item.title.contains("\u2193")
+        val hasArrowDown = item.title.contains("\u2193")//переменная-флаг, указывающая, хранит ли элемент стрелку вниз
         when (item.itemId) {
-            R.id.changedFiles -> {
+            R.id.changedFiles -> {//нажатие на пункт меню отображать измененные файлы
                 if (item.isChecked) {
+                    //отображаются все файлы, выбирается сортировка NameDown
                     item.isChecked = false
                     showChangedFilesflag = false
                     sortFiles(SortType.NameDown)
                 }
                 else {
+                    //отображаются измененные, выбирается сортировка NameDown
                     item.isChecked = true
                     showChangedFilesflag = true
                     sortFiles(SortType.NameDown)
@@ -107,6 +111,7 @@ class FileListFragment : Fragment() {
         }
         var listOfFiles: Array<out File>? = null
         val root = File(path)
+        //Далее в зависимости от флага показать измененные файлы сортируются либо все файлы либо только измененные
         if (showChangedFilesflag) {
             listOfFiles = root.listFiles()?.let { HashCheckout().compareHashWithBD(context as MainActivity, it) }
         } else {
@@ -114,6 +119,8 @@ class FileListFragment : Fragment() {
         }
         return listOfFiles
     }
+
+    //функция создания адаптера с заданной сортировкой и прикрепления его к listView
     private fun sortFiles(sortType: SortType) {
         val filesAndFolders  = getFilesAndFolders()
         val listViewFiles : ListView? = view?.findViewById(R.id.listView) // находим список

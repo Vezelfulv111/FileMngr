@@ -38,7 +38,7 @@ class FileAdapter(
 
     override fun getView(position: Int, View: View?, parent: ViewGroup?): View {
 
-        filesAndFolders.sortWith(FileComparator(sortType))
+        filesAndFolders.sortWith(FileComparator(sortType))//сортировка файлов по типу указанному в sortType
         //reversed() не использовался тк данный метод не учитывает что папки все равно должны быть вначале
 
         var convertView: View? = View
@@ -52,7 +52,7 @@ class FileAdapter(
         val sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault())//переменная формата отображения времени
 
         setImage(icon, selectedFile)//выбор иконки для файла
-        if (!selectedFile.isDirectory) {
+        if (!selectedFile.isDirectory) {//указание размера и даты создания файла
             fileSize.text = fileSize(selectedFile)
             fileTime.text = sdf.format(selectedFile.lastModified())
         }
@@ -66,12 +66,12 @@ class FileAdapter(
 
         val fileItem = convertView.findViewById(R.id.fileItem) as LinearLayout
         fileItem.setOnClickListener() {
-            if (selectedFile.isDirectory) {
+            if (selectedFile.isDirectory) {//если файл директория заходим в нее, вызывая новый фрагмент
                 val path = selectedFile.absolutePath
                 (context as MainActivity).changeFragmentView(path)
             }
             else {
-                //открытие файла
+                //файл не директория, открываем  данный файл
                 val uri = Uri.fromFile(filesAndFolders[position])
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(uri, getMimeType(filesAndFolders[position]))
@@ -144,7 +144,7 @@ class FileAdapter(
             }
         }
         else
-            image.setImageResource(R.drawable.folder_icon56)
+            image.setImageResource(R.drawable.folder_icon56)//если файл директория, ставим иконку директории
     }
 
 }
