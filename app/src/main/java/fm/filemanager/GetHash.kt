@@ -40,14 +40,11 @@ class HashCheckout {
         }
     }
 
-    fun compareHashWithBD(context: Context): MutableList<File> {
+    fun compareHashWithBD(context: Context, inListOfFiles: Array<out File>): Array<out File> {
         val dbHelper = FileHashesDbHelper(context)
         val db = dbHelper.readableDatabase
         val changedFilesList = mutableListOf<File>()
-        val path = Environment.getExternalStorageDirectory().path
-        val root = File(path)
-        val listOfFiles = root.listFiles()
-        for (file in listOfFiles) {
+        for (file in inListOfFiles) {
             if (!file.isDirectory) {
                 val fileName = file.name
                 val fileHash = md5HashFun(file)
@@ -65,13 +62,12 @@ class HashCheckout {
                     changedFilesList.add(file)// Файл не найден в БД
                 }
                 cursor.close()
-            }
-            else {
+            } else {
                 //changedFilesList.add(file)// Файл - директория, добавляем ее в список для навигации
             }
         }
         db.close()
-        return changedFilesList
+        return changedFilesList.toTypedArray()
     }
     fun saveHashToBD(context: Context) {
             val path = Environment.getExternalStorageDirectory().path

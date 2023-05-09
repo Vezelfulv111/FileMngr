@@ -50,7 +50,7 @@ class FileAdapter(
         val icon = convertView?.findViewById(R.id.icon) as ImageView
         val fileSize = convertView.findViewById(R.id.fileSize) as TextView
         val fileTime = convertView.findViewById(R.id.timeofEdit) as TextView
-        val sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault())
+        val sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault())//переменная формата отображения времени
 
         setImage(icon, selectedFile)//выбор иконки для файла
         if (!selectedFile.isDirectory) {
@@ -58,6 +58,7 @@ class FileAdapter(
             fileTime.text = sdf.format(selectedFile.lastModified())
         }
         else {
+            //если файл директория - его размер и дата создания не указываются
             fileSize.text = ""
             fileTime.text = ""
         }
@@ -89,6 +90,7 @@ class FileAdapter(
         return convertView
     }
 
+    //функция получения content type файла
     private fun getMimeType(file: File): String {
         var type = "*/*"
         val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
@@ -117,6 +119,7 @@ class FileAdapter(
             return " - $fileSizeInByte Б"
     }
 
+    //функция установки иконки для выбранного файла
     private fun setImage(image : ImageView, file : File) {
         if (!file.isDirectory) {
             val fileName = file.name

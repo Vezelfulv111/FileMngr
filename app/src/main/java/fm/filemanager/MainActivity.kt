@@ -17,89 +17,25 @@ import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
+    //var changedFiles: Array<out File>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        if(!checkPermission())
-            requestPermission()
+        if(!checkPermission())//запрос разрешения на запись в хранилище
+            requestPermission()//если разрешение не получено, запрашиваем его
         else {
-            setFirstFragmentView()
+            setFirstFragmentView()//разрешение получено, фрагмент с списком файлов отображается
         }
 
         if (checkPermission()) {
-            var changedFiles = HashCheckout().compareHashWithBD(this)
+            //changedFiles = HashCheckout().compareHashWithBD(this)
             HashCheckout().saveHashToBD(this)
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu,menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val fragment = getVisibleFragment() as FileListFragment
-        val hasArrowDown = item.title.contains("\u2193")
-        when (item.itemId) {
-            R.id.changedFiles -> {
-
-            }
-            R.id.name -> {
-                if (hasArrowDown) {
-                    item.title ="\u2191 По имени"
-                    fragment.sortByName(SortType.NameDown)
-                } else {
-                    item.title ="\u2193 По имени"
-                    fragment.sortByName(SortType.NameUp)
-                }
-                return true
-            }
-            R.id.size -> {
-                if (hasArrowDown) {
-                    item.title ="\u2191 По размеру"
-                    fragment.sortByName(SortType.SizeUp)
-                } else {
-                    item.title ="\u2193 По размеру"
-                    fragment.sortByName(SortType.SizeDown)
-                }
-                return true
-            }
-            R.id.date -> {
-                if (hasArrowDown) {
-                    item.title ="\u2191 По дате создания"
-                    fragment.sortByName(SortType.DateUp)
-                } else {
-                    item.title ="\u2193 По дате создания"
-                    fragment.sortByName(SortType.DateDown)
-                }
-                return true
-            }
-            R.id.extension -> {
-                if (hasArrowDown) {
-                    item.title ="\u2191 По расширению"
-                    fragment.sortByName(SortType.ExtensionUp)
-                } else {
-                    item.title ="\u2193 По расширению"
-                    fragment.sortByName(SortType.ExtensionDown)
-                }
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun getVisibleFragment(): Fragment? {
-        val fragmentManager: FragmentManager = this@MainActivity.supportFragmentManager
-        val fragments: List<Fragment> = fragmentManager.fragments
-        for (fragment in fragments) {
-            if (fragment.isVisible) return fragment
-        }
-        return null
-    }
-
-    //Callback формы на запрос разрешения
+    //Callback формы на запрос разрешения на запись во внутреннее хранилище
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 123) {
