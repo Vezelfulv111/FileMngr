@@ -13,4 +13,10 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="popupMenuStyle" >
+        <item name="android:divider">#688989</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:itemBackground">#4D4D4D</item>
+    </style>
 </resources>

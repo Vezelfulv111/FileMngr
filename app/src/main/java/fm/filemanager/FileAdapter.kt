@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.StrictMode
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,7 +88,9 @@ class FileAdapter(
         }
         fileItem.setOnLongClickListener { // Обработка долгого нажатия
             if (!selectedFile.isDirectory) {
-                val popupMenu = PopupMenu(context, convertView)
+
+                val wrapper: Context = ContextThemeWrapper(context, R.style.popupMenuStyle)
+                val popupMenu = PopupMenu(wrapper, convertView)
                 popupMenu.menu.add("Отправить")
                 popupMenu.menu.add("Удалить")
 
