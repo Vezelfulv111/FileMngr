@@ -1,5 +1,6 @@
 package fm.filemanager
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -17,9 +18,9 @@ import kotlin.math.roundToInt
 
 
 class FileAdapter(
-    var context: Context,
-    var filesAndFolders: Array<out File>,
-    var sortType: SortType
+    private var context: Context,
+    private var filesAndFolders: Array<out File>,
+    private var sortType: SortType
 ) : BaseAdapter() {
 
     override fun getCount(): Int {
@@ -63,7 +64,7 @@ class FileAdapter(
         fileName.text = selectedFile.name
 
         val fileItem = convertView.findViewById(R.id.fileItem) as LinearLayout
-        fileItem.setOnClickListener() {
+        fileItem.setOnClickListener {
             if (selectedFile.isDirectory) {//если файл директория заходим в нее, вызывая новый фрагмент
                 val path = selectedFile.absolutePath
                 (context as MainActivity).changeFragmentView(path)
@@ -84,27 +85,19 @@ class FileAdapter(
                 }
             }
         }
-        fileItem.setOnLongClickListener() { // Обработка долгого нажатия
+        fileItem.setOnLongClickListener { // Обработка долгого нажатия
             if (!selectedFile.isDirectory) {
                 val popupMenu = PopupMenu(context, convertView)
                 popupMenu.menu.add("Отправить")
+                popupMenu.menu.add("Удалить")
 
                 popupMenu.setOnMenuItemClickListener { item ->
-                    //Отправка файла
-                    if (item.title.equals("Отправить")) {
-                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "*/*"
-                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            putExtra(Intent.EXTRA_SUBJECT,filesAndFolders[position])
-                            putExtra(Intent.EXTRA_TEXT,"ExtraText")
-                            val fileURI = FileProvider.getUriForFile(
-                                context, BuildConfig.APPLICATION_ID + ".provider",
-                                filesAndFolders[position]
-                            )
-                            putExtra(Intent.EXTRA_STREAM, fileURI)
-                        }
-                        context.startActivity(shareIntent)
-                    }
+                    if (item.title.equals("Отправить"))
+                        sendFile(filesAndFolders[position])//Отправка файла
+
+                    if (item.title.equals("Удалить"))
+                        deleteFile(filesAndFolders[position])//Удаление файла
+
                     true
                 }
                 popupMenu.show()
@@ -112,6 +105,41 @@ class FileAdapter(
             return@setOnLongClickListener true
         }
         return convertView
+    }
+
+    private fun sendFile(file: File) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "*/*"
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            putExtra(Intent.EXTRA_SUBJECT,file)
+            //putExtra(Intent.EXTRA_TEXT,"ExtraText")
+            val fileURI = FileProvider.getUriForFile(
+                context, BuildConfig.APPLICATION_ID + ".provider",
+                file
+            )
+            putExtra(Intent.EXTRA_STREAM, fileURI)
+        }
+        context.startActivity(shareIntent)
+    }
+    private fun deleteFile(file: File) {
+        val dialog = AlertDialog.Builder(context).create()
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.del_dialog, null)
+
+        dialogView.findViewById<Button>(R.id.decline).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogView.findViewById<Button>(R.id.accept).setOnClickListener {
+            if (file.exists()) {
+                file.delete()
+                Toast.makeText(context, "Файл удален", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Файл не найден", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+        dialog.setView(dialogView)
+        dialog.show()
     }
 
 
