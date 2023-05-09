@@ -185,16 +185,25 @@ class FileAdapter(
                 return
             }
             when (fileName.substring(index)) {
+                ".apk" -> image.setImageResource(R.drawable.icon_apk)
+                ".djvu"-> image.setImageResource(R.drawable.icon_djvu)
                 ".doc" -> image.setImageResource(R.drawable.icon_doc)
                 ".docx"-> image.setImageResource(R.drawable.icon_docx)
+                ".epub" -> image.setImageResource(R.drawable.icon_epub)
+                ".fb2"-> image.setImageResource(R.drawable.icon_fb2)
+                ".flac"-> image.setImageResource(R.drawable.icon_flac)
                 ".jpg"-> image.setImageResource(R.drawable.icon_jpg)
                 ".mp3"-> image.setImageResource(R.drawable.icon_mp3)
+                ".mp4"-> image.setImageResource(R.drawable.icon_mp4)
                 ".pdf"-> image.setImageResource(R.drawable.icon_pdf)
                 ".png"-> image.setImageResource(R.drawable.icon_png)
-                ".zip"-> image.setImageResource(R.drawable.icon_zip_folder)
-                ".flac"-> image.setImageResource(R.drawable.icon_flac)
-                ".mp4"-> image.setImageResource(R.drawable.icon_mp4)
+                ".ppt"-> image.setImageResource(R.drawable.icon_ppt)
+                ".pptx"-> image.setImageResource(R.drawable.icon_pptx)
+                ".psd"-> image.setImageResource(R.drawable.icon_psd)
                 ".txt"-> image.setImageResource(R.drawable.icon_txt)
+                ".xls"-> image.setImageResource(R.drawable.icon_xls)
+                ".xlsx"-> image.setImageResource(R.drawable.icon_xlsx)
+                ".zip"-> image.setImageResource(R.drawable.icon_zip_folder)
                 else -> {
                     image.setImageResource(R.drawable.file_icon56)
                 }
