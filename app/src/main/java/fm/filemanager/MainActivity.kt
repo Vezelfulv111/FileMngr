@@ -1,6 +1,7 @@
 package fm.filemanager
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -21,14 +22,10 @@ class MainActivity : AppCompatActivity() {
             setFirstFragmentView()//разрешение получено, фрагмент с списком файлов отображается
         }
 
-        //if (checkPermission()) {
-            //HashCheckout().saveHashToBD(this)
-        //}
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        HashCheckout().saveHashToBD(this)//хэш сохраняется при выходе из приложения
+        if (checkPermission()) {
+            val hashService = Intent(this, HashService::class.java)
+            startService(hashService)//запуск сервиса в фоне
+        }
     }
 
     //Callback формы на запрос разрешения на запись во внутреннее хранилище
