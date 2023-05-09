@@ -3,7 +3,7 @@ package fm.filemanager
 import java.io.File
 
 
-class FileNameComparator(private val sortType: SortType) : Comparator<File> {
+class FileComparator(private val sortType: SortType) : Comparator<File> {
     override fun compare(file1: File, file2: File): Int {
         val isFile1Directory = file1.isDirectory
         val isFile2Directory = file2.isDirectory

@@ -3,7 +3,6 @@ package fm.filemanager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
@@ -39,7 +38,7 @@ class FileAdapter(
 
     override fun getView(position: Int, View: View?, parent: ViewGroup?): View {
 
-        filesAndFolders.sortWith(FileNameComparator(sortType))
+        filesAndFolders.sortWith(FileComparator(sortType))
         //reversed() не использовался тк данный метод не учитывает что папки все равно должны быть вначале
 
         var convertView: View? = View

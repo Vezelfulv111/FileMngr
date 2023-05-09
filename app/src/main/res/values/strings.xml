@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Файловый менеджер</string>
+    <string name="app_name">Файлы</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="table_DateOf">Дата создания :</string>
