@@ -1,7 +1,5 @@
 package fm.filemanager
-
 import android.app.Service
-import android.app.Service.START_STICKY
 import android.content.Intent
 import android.os.IBinder
 

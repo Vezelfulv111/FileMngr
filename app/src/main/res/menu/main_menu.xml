@@ -2,24 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/i1"
-        android:title="Сортировка">
+        android:title="@string/menu_Sort">
         <menu>
             <item
                 android:id="@+id/name"
-                android:title="\u2191 По имени"/>
+                android:title="@string/menu_ByName"/>
             <item
                 android:id="@+id/size"
-                android:title="\u2191 По размеру"/>
+                android:title="@string/menu_BySize"/>
             <item
                 android:id="@+id/date"
-                android:title="\u2191 По дате создания"/>
+                android:title="@string/menu_ByDate"/>
             <item
                 android:id="@+id/extension"
-                android:title="\u2191 По расширению"/>
+                android:title="@string/menu_ByExtension"/>
         </menu>
     </item>
     <item
         android:id="@+id/changedFiles"
         android:checkable="true"
-        android:title="Измененные файлы"></item>
+        android:title="@string/menu_changedFiles"/>
 </menu>

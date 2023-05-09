@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.*
 import android.widget.ListView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import java.io.File
-
 
 enum class SortType {
     NameDown,
@@ -20,7 +18,7 @@ enum class SortType {
     DateUp,
 }
 class FileListFragment : Fragment() {
-    private var showChangedFilesflag = false
+    private lateinit var showChangedFiles: MenuItem
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_file_list, container, false)
         setHasOptionsMenu(true)
@@ -37,6 +35,7 @@ class FileListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
+        showChangedFiles = menu.findItem(R.id.changedFiles)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -48,13 +47,11 @@ class FileListFragment : Fragment() {
                 if (item.isChecked) {
                     //отображаются все файлы, выбирается сортировка NameDown
                     item.isChecked = false
-                    showChangedFilesflag = false
                     sortFiles(SortType.NameDown)
                 }
                 else {
                     //отображаются измененные, выбирается сортировка NameDown
                     item.isChecked = true
-                    showChangedFilesflag = true
                     sortFiles(SortType.NameDown)
                 }
             }
@@ -109,10 +106,10 @@ class FileListFragment : Fragment() {
         val path = filepath.ifEmpty {
             Environment.getExternalStorageDirectory().path
         }
-        var listOfFiles: Array<out File>? = null
+        val listOfFiles: Array<out File>?
         val root = File(path)
         //Далее в зависимости от флага показать измененные файлы сортируются либо все файлы либо только измененные
-        if (showChangedFilesflag) {
+        if (showChangedFiles.isChecked) {
             listOfFiles = root.listFiles()?.let { HashCheckout().compareHashWithBD(context as MainActivity, it) }
         } else {
             listOfFiles = root.listFiles()

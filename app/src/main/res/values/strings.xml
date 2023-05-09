@@ -5,4 +5,11 @@
     <string name="table_DateOf">Дата создания :</string>
     <string name="table_size">Размер</string>
     <string name="table_fileName">Имя файла</string>
+    <string name="menu_Sort">Сортировка</string>
+    <string name="menu_ByName">↑ По имени</string>
+    <string name="menu_BySize">↑ По размеру</string>
+    <string name="menu_ByDate">↑ По дате создания</string>
+    <string name="menu_ByExtension">↑ По расширению</string>
+    <string name="table_imangeDesc">Icon</string>
+    <string name="menu_changedFiles">Измененные файлы</string>
 </resources>
